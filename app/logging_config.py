@@ -1,4 +1,8 @@
 import logging
+import os
+
+# Garante que a pasta de logs exista
+os.makedirs("logs", exist_ok=True)
 
 logging.basicConfig(
   filename="logs/app.log",
