@@ -62,11 +62,3 @@ pip install -r requirements.txt
 ### 3. Rodar a aplicação
 
 uvicorn app.main:app --reload
-
-## A API ficará disponível em:
-
-http://127.0.0.1:8000
-
-## A documentação automática (Swagger):
-
-http://127.0.0.1:8000/docs
