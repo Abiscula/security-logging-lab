@@ -1,13 +1,23 @@
 import logging
 import os
+import json
 
-# Garante que a pasta de logs exista
 os.makedirs("logs", exist_ok=True)
 
-logging.basicConfig(
-  filename="logs/app.log",
-  level=logging.INFO,
-  format="%(asctime)s | %(levelname)s | %(message)s"
-)
+class JsonFormatter(logging.Formatter):
+  def format(self, record):
+    log_record = {
+      "timestamp": self.formatTime(record, "%Y-%m-%d %H:%M:%S"),
+      "level": record.levelname,
+      "logger": record.name,
+      "message": record.getMessage(),
+    }
+    return json.dumps(log_record)
+
+handler = logging.FileHandler("logs/app.json")
+handler.setFormatter(JsonFormatter())
 
 logger = logging.getLogger("security_lab")
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+logger.propagate = False
