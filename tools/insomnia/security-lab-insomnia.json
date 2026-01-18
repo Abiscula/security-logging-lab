@@ -1,0 +1,68 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-01-15T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023",
+  "resources": [
+    {
+      "_id": "wrk_security_lab",
+      "_type": "workspace",
+      "name": "Security Lab API",
+      "description": "Workspace para testes de eventos de segurança",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_security_lab",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://127.0.0.1:8000"
+      }
+    },
+    {
+      "_id": "req_auth_login",
+      "_type": "request",
+      "parentId": "wrk_security_lab",
+      "name": "Auth - Login",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"victor\",\n  \"password\": \"123456\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "req_admin_action",
+      "_type": "request",
+      "parentId": "wrk_security_lab",
+      "name": "Admin - Sensitive Action",
+      "method": "POST",
+      "url": "{{ _.base_url }}/admin/action",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"action\": \"EXPORT_DATA\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "req_system_error",
+      "_type": "request",
+      "parentId": "wrk_security_lab",
+      "name": "System - Error Simulation",
+      "method": "GET",
+      "url": "{{ _.base_url }}/system/error"
+    }
+  ]
+}
