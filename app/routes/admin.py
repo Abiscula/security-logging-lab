@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
-from app.DTO import ActionRequest
-from app.events import log_sensitive_action
+from app.schemas.admin import ActionRequest
+from app.services.security_events import log_sensitive_action
 
 router = APIRouter(
   prefix="/admin",

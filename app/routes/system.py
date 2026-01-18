@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from app.events import log_system_error
+from app.services.security_events import log_system_error
 
 router = APIRouter(
   prefix="/system",
