@@ -13,7 +13,7 @@ app = FastAPI()
 @app.post("/auth/login")
 def login(data: LoginRequest, request: Request):
   ip = request.client.host
-  agent = request.headers.get("user-agent", "unknown")
+  agent = request.headers.get("user-agent")
 
   success = data.password == "123456"
   log_auth_attempt(data.username, ip, agent, success)
@@ -24,7 +24,7 @@ def login(data: LoginRequest, request: Request):
 @app.post("/admin/action")
 def admin_action(data: ActionRequest, request: Request):
   ip = request.client.host
-  agent = request.headers.get("user-agent", "unknown")
+  agent = request.headers.get("user-agent")
 
   log_sensitive_action(data.action, ip, agent)
   return {"status": "action registered"}
@@ -33,7 +33,7 @@ def admin_action(data: ActionRequest, request: Request):
 @app.get("/system/error")
 def system_error(request: Request):
   ip = request.client.host
-  agent = request.headers.get("user-agent", "unknown")
+  agent = request.headers.get("user-agent")
 
   try:
     1 / 0

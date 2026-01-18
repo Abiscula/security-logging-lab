@@ -14,7 +14,7 @@ class JsonFormatter(logging.Formatter):
     }
     return json.dumps(log_record)
 
-handler = logging.FileHandler("logs/app.json")
+handler = logging.FileHandler("logs/app.jsonl")
 handler.setFormatter(JsonFormatter())
 
 logger = logging.getLogger("security_lab")
