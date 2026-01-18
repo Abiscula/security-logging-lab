@@ -24,12 +24,15 @@ def pre_request(request: Request):
 def post_request(request: Request, response):
   duration_ms = int((time.time() - request.state.start_time) * 1000)
 
-  logger.info(json.dumps({
-    "type": "REQUEST",
-    "method": request.method,
-    "path": request.url.path,
-    "status": response.status_code,
-    "duration_ms": duration_ms,
-    "ip": request.state.ip,
-    "user_agent": request.state.user_agent
-  }))
+  logger.info(
+    "request log",
+    extra={
+      "type": "REQUEST",
+      "method": request.method,
+      "path": request.url.path,
+      "status": response.status_code,
+      "duration_ms": duration_ms,
+      "ip": request.state.ip,
+      "user_agent": request.state.user_agent
+    }
+)

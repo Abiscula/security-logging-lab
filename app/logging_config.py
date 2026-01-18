@@ -10,8 +10,16 @@ class JsonFormatter(logging.Formatter):
       "timestamp": self.formatTime(record, "%Y-%m-%d %H:%M:%S"),
       "level": record.levelname,
       "logger": record.name,
-      "message": record.getMessage(),
     }
+
+    # Campos extras (payload)
+    for key, value in record.__dict__.items():
+      if key not in ("msg", "args", "levelname", "levelno", "name", "pathname",
+                     "filename", "module", "exc_info", "exc_text", "stack_info",
+                     "lineno", "funcName", "created", "msecs", "relativeCreated",
+                     "thread", "threadName", "processName", "process"):
+        log_record[key] = value
+
     return json.dumps(log_record)
 
 handler = logging.FileHandler("logs/app.jsonl")
