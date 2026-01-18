@@ -9,8 +9,8 @@ router = APIRouter(
 
 @router.post("/action")
 def admin_action(data: ActionRequest, request: Request):
-  ip = request.client.host
-  agent = request.headers.get("user-agent")
+  ip = request.state.ip
+  agent = request.state.user_agent
 
   log_sensitive_action(data.action, ip, agent)
   return {"status": "Ação registrada"}

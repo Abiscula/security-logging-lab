@@ -9,8 +9,8 @@ router = APIRouter(
 
 @router.post("/login")
 def login(data: LoginRequest, request: Request):
-  ip = request.client.host
-  agent = request.headers.get("user-agent")
+  ip = request.state.ip
+  agent = request.state.user_agent
 
   success = data.password == "123456"
   log_auth_attempt(data.username, ip, agent, success)

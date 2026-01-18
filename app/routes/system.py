@@ -8,8 +8,8 @@ router = APIRouter(
 
 @router.get("/error")
 def system_error(request: Request):
-  ip = request.client.host
-  agent = request.headers.get("user-agent")
+  ip = request.state.ip
+  agent = request.state.user_agent
 
   try:
     1 / 0
