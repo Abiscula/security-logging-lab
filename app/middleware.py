@@ -4,17 +4,25 @@ from fastapi import Request
 from app.logging_config import logger
 
 async def request_context_middleware(request: Request, call_next):
-  # ===== PRÉ-ROTA =====
-  request.state.ip = request.client.host if request.client else None
-  request.state.user_agent = request.headers.get("user-agent")
+  pre_request(request)
 
-  start_time = time.time()
-
-  # Executa a rota
   response = await call_next(request)
 
-  # ===== PÓS-ROTA =====
-  duration_ms = int((time.time() - start_time) * 1000)
+  post_request(request, response)
+
+  return response
+
+
+# Ocorre antes da request
+def pre_request(request: Request):
+  request.state.ip = request.client.host if request.client else None
+  request.state.user_agent = request.headers.get("user-agent")
+  request.state.start_time = time.time()
+
+
+#Ocorre após a request
+def post_request(request: Request, response):
+  duration_ms = int((time.time() - request.state.start_time) * 1000)
 
   logger.info(json.dumps({
     "type": "REQUEST",
@@ -25,5 +33,3 @@ async def request_context_middleware(request: Request, call_next):
     "ip": request.state.ip,
     "user_agent": request.state.user_agent
   }))
-
-  return response
