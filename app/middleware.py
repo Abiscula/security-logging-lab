@@ -1,7 +1,7 @@
-import json
 import time
 from fastapi import Request
 from app.logging_config import logger
+from app.enums.log_type import LogType
 
 async def request_context_middleware(request: Request, call_next):
   pre_request(request)
@@ -27,7 +27,7 @@ def post_request(request: Request, response):
   logger.info(
     "request log",
     extra={
-      "type": "REQUEST",
+      "type": LogType.REQUEST,
       "method": request.method,
       "path": request.url.path,
       "status": response.status_code,

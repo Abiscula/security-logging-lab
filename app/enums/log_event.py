@@ -1,0 +1,6 @@
+from enum import Enum
+
+class LogEvent(str, Enum):
+  AUTH_ATTEMPT = "AUTH_ATTEMPT"
+  SENSITIVE_ACTION = "SENSITIVE_ACTION"
+  SYSTEM_ERROR = "SYSTEM_ERROR"
