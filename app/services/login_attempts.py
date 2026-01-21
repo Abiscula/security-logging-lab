@@ -5,7 +5,7 @@ from typing import Dict
 MAX_ATTEMPTS = 5
 
 # Janela de tempo em que o bloqueio é aplicado após excesso de tentativas
-BLOCK_WINDOW = timedelta(minutes=10)
+BLOCK_WINDOW = timedelta(minutes=1)
 
 # Armazena tentativas de login em memória
 # key -> { count: int, last_attempt: datetime }
