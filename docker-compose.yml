@@ -8,5 +8,12 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+    depends_on:
+      - redis
     environment:
       - TZ=America/Sao_Paulo
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"

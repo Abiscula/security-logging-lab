@@ -1,55 +1,35 @@
-from datetime import datetime, timedelta, timezone
-from typing import Dict
+import redis
 
-# Número máximo de tentativas permitidas dentro da janela de bloqueio
 MAX_ATTEMPTS = 5
+BLOCK_WINDOW_SECONDS = 60  # 1 minuto
 
-# Janela de tempo em que o bloqueio é aplicado após excesso de tentativas
-BLOCK_WINDOW = timedelta(minutes=1)
+redis_client = redis.Redis(host="redis", port=6379, decode_responses=True)
 
-# Armazena tentativas de login em memória
-# key -> { count: int, last_attempt: datetime }
-_attempts: Dict[str, dict] = {}
+def _key(key: str) -> str:
+    return f"login_attempts:{key}"
 
 
 # Registra uma tentativa de login com falha para a chave informada.
-# Retorna o número atual de tentativas.
 def register_failed_attempt(key: str) -> int:
-    now = datetime.now(timezone.utc)
-    data = _attempts.get(key)
+    redis_key = _key(key)
 
-    # Primeira tentativa registrada
-    if not data:
-        _attempts[key] = {
-            "count": 1,
-            "last_attempt": now
-        }
-        return 1
+    count = redis_client.incr(redis_key)
 
-    # Se a janela de bloqueio expirou, reinicia o contador
-    if now - data["last_attempt"] > BLOCK_WINDOW:
-        _attempts[key] = {
-            "count": 1,
-            "last_attempt": now
-        }
-        return 1
+    # define o TTL apenas na primeira tentativa
+    if count == 1:
+        redis_client.expire(redis_key, BLOCK_WINDOW_SECONDS)
 
-    # Incrementa tentativa dentro da janela
-    data["count"] += 1
-    data["last_attempt"] = now
-    return data["count"]
+    return count
+
 
 
 # Verifica se a chave informada está bloqueada por excesso de tentativas.
 def is_blocked(key: str) -> bool:
-    data = _attempts.get(key)
+    redis_key = _key(key)
 
-    if not data:
+    count = redis_client.get(redis_key)
+
+    if not count:
         return False
 
-    attempts_exceeded = data["count"] >= MAX_ATTEMPTS
-    within_block_window = (
-        datetime.now(timezone.utc) - data["last_attempt"] <= BLOCK_WINDOW
-    )
-
-    return attempts_exceeded and within_block_window
+    return int(count) >= MAX_ATTEMPTS
