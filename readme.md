@@ -48,6 +48,8 @@ Cada cenário gera registros de log persistidos localmente.
 
 ## ▶️ Como rodar o projeto
 
+## Opção 1 — Rodar localmente (Python + venv)
+
 ### 1. Criar e ativar o ambiente virtual
 
 **MacOS / Linux**
@@ -62,3 +64,9 @@ pip install -r requirements.txt
 ### 3. Rodar a aplicação
 
 uvicorn app.main:app --reload
+
+## Opção 2 — Rodar com Docker (recomendado)
+
+### Construir e subir os containers
+
+docker compose up --build
