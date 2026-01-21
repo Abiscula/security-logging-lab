@@ -1,20 +1,30 @@
+from typing import Optional
+
 from app.logging_config import logger
 from app.enums.log_type import LogType
 from app.enums.log_event import LogEvent
+from app.enums.login_errors import LoginErrors
 
 # Registra uma tentativa de login (sucesso ou falha)
-def log_auth_attempt(username, ip, user_agent, success):
-  logger.info(
-    "auth attempt",
-    extra={
-      "type": LogType.EVENT,
-      "event": LogEvent.AUTH_ATTEMPT,
-      "user": username,
-      "result": "SUCCESS" if success else "FAIL",
-      "ip": ip,
-      "user_agent": user_agent
-    }
-  )
+def log_auth_attempt(username: str,
+  ip: str,
+  user_agent: str,
+  success: bool,
+  reason: Optional[LoginErrors] = None
+):
+  payload = {
+    "type": LogType.EVENT,
+    "event": LogEvent.AUTH_ATTEMPT,
+    "user": username,
+    "result": "SUCCESS" if success else "FAIL",
+    "ip": ip,
+    "user_agent": user_agent
+  }
+
+  if not success and reason is not None:
+    payload["reason"] = reason
+
+  logger.info("auth attempt", extra=payload)
 
 # Registra uma ação sensível executada no sistema (auditoria)
 def log_sensitive_action(action, ip, user_agent):
