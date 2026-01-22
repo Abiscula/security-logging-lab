@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Request
 from app.schemas.auth import LoginRequest
-from app.services.login_attempts import is_blocked
+from app.services.login_attempts import LoginAttemptService
 from app.routes.auth.handlers import (
     handle_blocked_login,
     handle_invalid_credentials,
     handle_successful_login
 )
+
+loginAttemptService = LoginAttemptService()
 
 router = APIRouter(
     prefix="/auth",
@@ -19,7 +21,7 @@ def login(data: LoginRequest, request: Request):
     user_agent = request.state.user_agent
     attempt_key = f"{data.username}:{ip}"
 
-    if is_blocked(attempt_key):
+    if loginAttemptService.is_blocked(attempt_key):
         return handle_blocked_login(data.username, ip, user_agent)
 
     password_matches = data.password == "123456"

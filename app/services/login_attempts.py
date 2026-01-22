@@ -1,35 +1,34 @@
 import redis
 
-MAX_ATTEMPTS = 5
-BLOCK_WINDOW_SECONDS = 60  # 1 minuto
+class LoginAttemptService:
 
-redis_client = redis.Redis(host="redis", port=6379, decode_responses=True)
+    def __init__(self, max_attempts=5, block_window=60):
+        self.redis_client = redis.Redis(host="redis", port=6379, decode_responses=True)
+        self.max_attempts = max_attempts
+        self.block_window = block_window
 
-def _key(key: str) -> str:
-    return f"login_attempts:{key}"
+    def _key(self, key: str) -> str:
+        return f"login_attempts:{key}"
 
+    # Registra uma tentativa de login com falha
+    def register_failed_attempt(self, key: str) -> int:
+        redis_key = self._key(key)
 
-# Registra uma tentativa de login com falha para a chave informada.
-def register_failed_attempt(key: str) -> int:
-    redis_key = _key(key)
+        count = self.redis_client.incr(redis_key)
 
-    count = redis_client.incr(redis_key)
+        # define TTL só na primeira tentativa
+        if count == 1:
+            self.redis_client.expire(redis_key, self.block_window)
 
-    # define o TTL apenas na primeira tentativa
-    if count == 1:
-        redis_client.expire(redis_key, BLOCK_WINDOW_SECONDS)
+        return count
 
-    return count
+    # Verifica se a chave informada está bloqueada por excesso de tentativas.
+    def is_blocked(self, key: str) -> bool:
+        redis_key = self._key(key)
 
+        count = self.redis_client.get(redis_key)
 
+        if not count:
+            return False
 
-# Verifica se a chave informada está bloqueada por excesso de tentativas.
-def is_blocked(key: str) -> bool:
-    redis_key = _key(key)
-
-    count = redis_client.get(redis_key)
-
-    if not count:
-        return False
-
-    return int(count) >= MAX_ATTEMPTS
+        return int(count) >= self.max_attempts
