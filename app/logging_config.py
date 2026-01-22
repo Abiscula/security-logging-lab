@@ -2,37 +2,35 @@ import logging
 import os
 from app.logging.formatter import JsonFormatter
 
-# Garante que o diretório de logs exista.
-def ensure_log_directory(path: str = "logs") -> None:
-  os.makedirs(path, exist_ok=True)
+class LoggingConfig:
 
+    def __init__(self, name="security_lab", level=logging.INFO, path="logs/app.jsonl"):
+        self.name = name
+        self.level = level
+        self.path = path
 
-# Cria e configura o handler de arquivo com formatter JSON.
-def create_file_handler(
-  filepath: str = "logs/app.jsonl"
-) -> logging.FileHandler:
+    # Garante que o diretório de logs exista
+    def ensure_log_directory(self):
+        os.makedirs("logs", exist_ok=True)
 
-  handler = logging.FileHandler(filepath)
-  handler.setFormatter(JsonFormatter())
-  return handler
+    # Cria o handler de arquivo
+    def create_file_handler(self):
+        handler = logging.FileHandler(self.path)
+        handler.setFormatter(JsonFormatter())
+        return handler
 
+    # Cria e retorna o logger configurado
+    def build_logger(self) -> logging.Logger:
+        self.ensure_log_directory()
 
-# Configura e retorna o logger principal da aplicação.
-def configure_logger(
-  name: str = "security_lab",
-  level: int = logging.INFO
-) -> logging.Logger:
-  
-  ensure_log_directory()
+        logger = logging.getLogger(self.name)
+        logger.setLevel(self.level)
 
-  logger = logging.getLogger(name)
-  logger.setLevel(level)
+        if not logger.handlers:
+            logger.addHandler(self.create_file_handler())
 
-  if not logger.handlers:
-    logger.addHandler(create_file_handler())
-
-  logger.propagate = False
-  return logger
-
-
-logger = configure_logger()
+        logger.propagate = False
+        return logger
+    
+logging_config = LoggingConfig()
+logger = logging_config.build_logger()
