@@ -1,9 +1,20 @@
 import redis
+import os
 
 class LoginAttemptService:
 
     def __init__(self, max_attempts=5, block_window=60):
-        self.redis_client = redis.Redis(host="redis", port=6379, decode_responses=True)
+        redis_host = os.getenv("REDIS_HOST")
+
+        if not redis_host:
+            raise RuntimeError("REDIS_HOST não definido")
+
+        self.redis_client = redis.Redis(
+            host=redis_host,
+            port=6379,
+            decode_responses=True
+        )
+
         self.max_attempts = max_attempts
         self.block_window = block_window
 

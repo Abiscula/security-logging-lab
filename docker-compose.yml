@@ -12,6 +12,7 @@ services:
       - redis
     environment:
       - TZ=America/Sao_Paulo
+      - REDIS_HOST=redis
 
   redis:
     image: redis:7
