@@ -26,12 +26,12 @@ Trata-se de um projeto experimental e incremental, utilizado como base para apre
 
 A API atualmente simula os seguintes cenários:
 
-- **Tentativa de autenticação**
-  - Login com sucesso ou falha
-- **Ação sensível**
-  - Representa operações críticas do sistema
-- **Erro de sistema**
-  - Simulação de falhas e exceções
+- Tentativa de autenticação
+- Login com sucesso ou falha
+- Ação sensível
+- Representa operações críticas do sistema
+- Erro de sistema
+- Simulação de falhas e exceções
 
 Cada cenário gera registros de log persistidos localmente.
 
@@ -41,6 +41,8 @@ Cada cenário gera registros de log persistidos localmente.
 
 - Python 3
 - FastAPI
+- Redis
+- Docker & Docker Compose
 - Logging padrão do Python
 - Insomnia (para testes de requisições)
 
@@ -48,25 +50,18 @@ Cada cenário gera registros de log persistidos localmente.
 
 ## ▶️ Como rodar o projeto
 
-## Opção 1 — Rodar localmente (Python + venv)
+Este projeto é executado exclusivamente via Docker, garantindo um ambiente consistente com Redis e dependências já configuradas.
 
-### 1. Criar e ativar o ambiente virtual
+### 1. Subir a aplicação
 
-**MacOS / Linux**
-bash
-python3 -m venv venv
-source venv/bin/activate
+`docker compose up --build`
 
-### 2. Instalar as dependências
+#### A API ficará disponível em:
 
-pip install -r requirements.txt
+http://localhost:8000
 
-### 3. Rodar a aplicação
+### 2. Executar normalmente após a primeira build
 
-uvicorn app.main:app --reload
+Depois da primeira vez, quando não houver mudanças em dependências ou no Dockerfile, você pode usar apenas:
 
-## Opção 2 — Rodar com Docker (recomendado)
-
-### Construir e subir os containers
-
-docker compose up --build
+`docker compose up `
