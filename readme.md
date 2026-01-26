@@ -92,3 +92,19 @@ AWS_ENDPOINT_URL=http://localstack:4566
 ### 3. Criar o bucket S3 de logs
 
 `docker compose exec api python app/scripts/create_bucket.py`
+
+## 🐳 Acessando o container da API
+
+Como o projeto roda totalmente dentro de containers Docker, muitas operações precisam ser executadas dentro do container da API, e não no sistema operacional local.
+
+Para abrir um terminal dentro do container da API:
+
+`docker compose exec api sh`
+
+Esse comando abre um shell dentro do container que executa o FastAPI, permitindo:
+
+- Rodar Python no mesmo ambiente da aplicação
+- Executar aws apontando para o LocalStack
+- Ver variáveis de ambiente (AWS, Redis, etc)
+- Executar scripts internos (python app/scripts/...)
+- Depurar erros reais do ambiente Docker
