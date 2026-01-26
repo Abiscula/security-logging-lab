@@ -1,5 +1,8 @@
 version: "3.9"
 
+env_file:
+  - .env
+
 services:
   api:
     build: .
@@ -13,6 +16,10 @@ services:
     environment:
       - TZ=America/Sao_Paulo
       - REDIS_HOST=redis
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_ENDPOINT_URL=${AWS_ENDPOINT_URL}
 
   redis:
     image: redis:7
