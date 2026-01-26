@@ -1,6 +1,7 @@
 import time
 from fastapi import Request
 from app.logging_config import logger
+from app.services.log_storage import save_log
 from app.enums.log_type import LogType
 
 async def request_context_middleware(request: Request, call_next):
@@ -24,15 +25,15 @@ def pre_request(request: Request):
 def post_request(request: Request, response):
   duration_ms = int((time.time() - request.state.start_time) * 1000)
 
-  logger.info(
-    "request log",
-    extra={
-      "type": LogType.REQUEST,
-      "method": request.method,
-      "path": request.url.path,
-      "status": response.status_code,
-      "duration_ms": duration_ms,
-      "ip": request.state.ip,
-      "user_agent": request.state.user_agent
-    }
-)
+  payload = {
+    "type": LogType.REQUEST,
+    "method": request.method,
+    "path": request.url.path,
+    "status": response.status_code,
+    "duration_ms": duration_ms,
+    "ip": request.state.ip,
+    "user_agent": request.state.user_agent
+  }
+
+  logger.info("request log", extra=payload)
+  save_log(payload)
