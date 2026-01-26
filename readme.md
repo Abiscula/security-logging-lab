@@ -39,12 +39,14 @@ Cada cenário gera registros de log persistidos localmente.
 
 ## 🛠️ Tecnologias utilizadas
 
-- Python 3
-- FastAPI
-- Redis
-- Docker & Docker Compose
-- Logging padrão do Python
-- Insomnia (para testes de requisições)
+- **Python 3**
+- **FastAPI** — API HTTP
+- **Redis** — controle de tentativas de login (rate limit / bloqueio)
+- **LocalStack (AWS S3)** — simulação de armazenamento de logs em nuvem
+- **Boto3** — cliente AWS para persistência e leitura dos logs
+- **Docker & Docker Compose** — ambiente isolado e orquestração dos serviços
+- **Logging padrão do Python** — geração de logs estruturados
+- **Insomnia** — testes de requisições e consumo da API
 
 ---
 
