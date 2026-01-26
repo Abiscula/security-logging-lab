@@ -65,3 +65,28 @@ http://localhost:8000
 Depois da primeira vez, quando não houver mudanças em dependências ou no Dockerfile, você pode usar apenas:
 
 `docker compose up `
+
+---
+
+## ☁️ Simulação de AWS com LocalStack (S3)
+
+Este projeto utiliza o **LocalStack** para simular serviços da AWS localmente, em especial o **S3**, usado para persistência de logs.
+
+### 1. Criar o arquivo `.env`
+
+Crie um arquivo `.env` na raiz do projeto, usando `.env_example` como base:
+
+```
+AWS_ACCESS_KEY_ID=test
+AWS_SECRET_ACCESS_KEY=test
+AWS_DEFAULT_REGION=us-east-1
+AWS_ENDPOINT_URL=http://localstack:4566
+```
+
+### 2. Subir os containers
+
+`docker compose up --build`
+
+### 3. Criar o bucket S3 de logs
+
+`docker compose exec api python app/scripts/create_bucket.py`
