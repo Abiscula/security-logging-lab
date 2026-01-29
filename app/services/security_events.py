@@ -1,6 +1,5 @@
 from typing import Optional
 
-from app.logging_config import logger
 from app.services.aws.s3_log_writter import save_log
 from app.enums.log_type import LogType
 from app.enums.log_event import LogEvent
@@ -29,7 +28,6 @@ class SecurityEvents:
     if not success and reason is not None:
       payload["reason"] = reason
 
-    logger.info("auth attempt", extra=payload)
     save_log(payload)
 
   # Registra uma ação sensível executada no sistema (auditoria)
@@ -42,7 +40,6 @@ class SecurityEvents:
       "user_agent": user_agent
     }
 
-    logger.warning("sensitive action", extra=payload)
     save_log(payload)
 
   # Registra um erro de sistema (incidente/falha)
@@ -55,5 +52,4 @@ class SecurityEvents:
       "user_agent": user_agent
     }
 
-    logger.error("system error", extra=payload)
     save_log(payload)

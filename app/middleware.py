@@ -1,6 +1,5 @@
 import time
 from fastapi import Request
-from app.logging_config import logger
 from app.services.aws.s3_log_writter import save_log
 from app.enums.log_type import LogType
 
@@ -35,5 +34,4 @@ def post_request(request: Request, response):
     "user_agent": request.state.user_agent
   }
 
-  logger.info("request log", extra=payload)
   save_log(payload)
