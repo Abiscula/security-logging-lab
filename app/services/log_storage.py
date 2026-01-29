@@ -1,7 +1,7 @@
 import json
 import uuid
 from datetime import datetime, timezone
-from app.services.s3_client import get_s3_client
+from app.services.aws.s3_client import get_s3_client
 
 BUCKET_NAME = "security-logs"
 

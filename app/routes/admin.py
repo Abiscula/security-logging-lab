@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Query
 from app.schemas.admin import ActionRequest
 from app.services.security_events import SecurityEvents
-from app.services.s3_log_reader import list_logs
+from app.services.aws.s3_log_reader import list_logs
 
 
 security_events = SecurityEvents()
