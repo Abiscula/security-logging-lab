@@ -1,7 +1,7 @@
 import time
 from fastapi import Request
 from app.logging_config import logger
-from app.services.log_storage import save_log
+from app.services.aws.s3_log_writter import save_log
 from app.enums.log_type import LogType
 
 async def request_context_middleware(request: Request, call_next):

@@ -1,7 +1,7 @@
 from typing import Optional
 
 from app.logging_config import logger
-from app.services.log_storage import save_log
+from app.services.aws.s3_log_writter import save_log
 from app.enums.log_type import LogType
 from app.enums.log_event import LogEvent
 from app.enums.login_errors import LoginErrors
