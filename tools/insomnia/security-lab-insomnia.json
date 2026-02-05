@@ -21,9 +21,15 @@
       }
     },
     {
+      "_id": "grp_auth",
+      "_type": "request_group",
+      "parentId": "wrk_security_lab",
+      "name": "Auth"
+    },
+    {
       "_id": "req_auth_login",
       "_type": "request",
-      "parentId": "wrk_security_lab",
+      "parentId": "grp_auth",
       "name": "Auth - Login",
       "method": "POST",
       "url": "{{ _.base_url }}/auth/login",
@@ -39,9 +45,15 @@
       ]
     },
     {
+      "_id": "grp_admin",
+      "_type": "request_group",
+      "parentId": "wrk_security_lab",
+      "name": "Admin"
+    },
+    {
       "_id": "req_admin_action",
       "_type": "request",
-      "parentId": "wrk_security_lab",
+      "parentId": "grp_admin",
       "name": "Admin - Sensitive Action",
       "method": "POST",
       "url": "{{ _.base_url }}/admin/action",
@@ -57,17 +69,9 @@
       ]
     },
     {
-      "_id": "req_system_error",
-      "_type": "request",
-      "parentId": "wrk_security_lab",
-      "name": "System - Error Simulation",
-      "method": "GET",
-      "url": "{{ _.base_url }}/system/error"
-    },
-    {
       "_id": "req_admin_logs",
       "_type": "request",
-      "parentId": "wrk_security_lab",
+      "parentId": "grp_admin",
       "name": "Admin - List Logs",
       "method": "GET",
       "url": "{{ _.base_url }}/admin/logs?limit=100",
@@ -77,6 +81,20 @@
           "value": "application/json"
         }
       ]
+    },
+    {
+      "_id": "grp_system",
+      "_type": "request_group",
+      "parentId": "wrk_security_lab",
+      "name": "System"
+    },
+    {
+      "_id": "req_system_error",
+      "_type": "request",
+      "parentId": "grp_system",
+      "name": "System - Error Simulation",
+      "method": "GET",
+      "url": "{{ _.base_url }}/system/error"
     }
   ]
 }
