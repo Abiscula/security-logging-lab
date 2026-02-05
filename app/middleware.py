@@ -3,6 +3,10 @@ from fastapi import Request
 from app.services.aws.s3_log_writter import save_log
 from app.enums.log_type import LogType
 
+IGNORED_PATHS = [
+  "/admin/logs",
+]
+
 async def request_context_middleware(request: Request, call_next):
   pre_request(request)
 
@@ -22,6 +26,9 @@ def pre_request(request: Request):
 
 #Ocorre após a request
 def post_request(request: Request, response):
+  if request.url.path in IGNORED_PATHS:
+    return
+  
   duration_ms = int((time.time() - request.state.start_time) * 1000)
 
   payload = {
