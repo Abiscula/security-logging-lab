@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Query
 from typing import Optional
 
 from app.schemas.admin import ActionRequest
+from app.enums.log_event import LogEvent
 from app.services.security_events import SecurityEvents
 from app.services.aws.s3_log_reader import list_logs
 
@@ -25,9 +26,11 @@ def admin_action(data: ActionRequest, request: Request):
 @router.get("/logs")
 def get_logs(
     limit: int = Query(100, le=500),
-    cursor: Optional[str] = None
+    cursor: Optional[str] = None,
+    event: Optional[LogEvent] = None
+
 ):
-    result = list_logs(limit=limit, cursor=cursor)
+    result = list_logs(limit=limit, cursor=cursor, event=event)
 
     return {
         "count": len(result["logs"]),
