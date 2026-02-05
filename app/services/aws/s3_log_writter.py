@@ -1,11 +1,13 @@
 import json
 import uuid
 from datetime import datetime, timezone
+
 from app.services.aws.s3_client import get_s3_client
 
 BUCKET_NAME = "security-logs"
 
 s3 = get_s3_client()
+
 
 # Persiste um log no S3 (LocalStack)
 def save_log(entry: dict):
@@ -16,7 +18,7 @@ def save_log(entry: dict):
             Bucket=BUCKET_NAME,
             Key=key,
             Body=json.dumps(entry),
-            ContentType="application/json"
+            ContentType="application/json",
         )
 
         return key

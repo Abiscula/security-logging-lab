@@ -1,19 +1,18 @@
-from typing import Optional
 import json
+from typing import Optional
 
-from app.enums.s3_fields import S3ListKeys
 from app.enums.log_event import LogEvent
+from app.enums.s3_fields import S3ListKeys
 from app.services.aws.s3_client import get_s3_client
 
 BUCKET_NAME = "security-logs"
 
 s3 = get_s3_client()
 
+
 # Lista os logs armazenados no S3
 def list_logs(
-    limit: int = 100,
-    cursor: Optional[str] = None,
-    event: Optional[LogEvent] = None
+    limit: int = 100, cursor: Optional[str] = None, event: Optional[LogEvent] = None
 ):
     params = {
         "Bucket": BUCKET_NAME,
@@ -30,10 +29,7 @@ def list_logs(
     logs = []
 
     for obj in objects:
-        data = s3.get_object(
-            Bucket=BUCKET_NAME,
-            Key=obj["Key"]
-        )
+        data = s3.get_object(Bucket=BUCKET_NAME, Key=obj["Key"])
 
         body = data["Body"].read().decode("utf-8")
         log = json.loads(body)
@@ -49,5 +45,5 @@ def list_logs(
 
     return {
         "logs": list(reversed(logs)),
-        "next_cursor": response.get(S3ListKeys.NEXT_TOKEN)
+        "next_cursor": response.get(S3ListKeys.NEXT_TOKEN),
     }

@@ -1,7 +1,9 @@
 from botocore.exceptions import ClientError
+
 from app.services.aws.s3_client import get_s3_client
 
 BUCKET_NAME = "security-logs"
+
 
 # Garante que o bucket de logs exista no S3 (LocalStack).
 # Se não existir, cria automaticamente na inicialização da aplicação.

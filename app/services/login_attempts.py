@@ -1,5 +1,7 @@
-import redis
 import os
+
+import redis
+
 
 class LoginAttemptService:
 
@@ -10,9 +12,7 @@ class LoginAttemptService:
             raise RuntimeError("REDIS_HOST não definido")
 
         self.redis_client = redis.Redis(
-            host=redis_host,
-            port=6379,
-            decode_responses=True
+            host=redis_host, port=6379, decode_responses=True
         )
 
         self.max_attempts = max_attempts

@@ -1,8 +1,7 @@
-import boto3
 import os
 
 import boto3
-import os
+
 
 def get_s3_client():
     return boto3.client(

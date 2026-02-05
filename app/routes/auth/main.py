@@ -1,18 +1,16 @@
 from fastapi import APIRouter, Request
-from app.schemas.auth import LoginRequest
-from app.services.login_attempts import LoginAttemptService
+
 from app.routes.auth.handlers import (
     handle_blocked_login,
     handle_invalid_credentials,
-    handle_successful_login
+    handle_successful_login,
 )
+from app.schemas.auth import LoginRequest
+from app.services.login_attempts import LoginAttemptService
 
 loginAttemptService = LoginAttemptService()
 
-router = APIRouter(
-    prefix="/auth",
-    tags=["Auth"]
-)
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/login")
@@ -27,15 +25,6 @@ def login(data: LoginRequest, request: Request):
     password_matches = data.password == "123456"
 
     if not password_matches:
-        return handle_invalid_credentials(
-            data.username,
-            ip,
-            user_agent,
-            attempt_key
-        )
+        return handle_invalid_credentials(data.username, ip, user_agent, attempt_key)
 
-    return handle_successful_login(
-        data.username,
-        ip,
-        user_agent
-    )
+    return handle_successful_login(data.username, ip, user_agent)
